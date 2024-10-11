@@ -28,7 +28,7 @@ export async function getCustomer(ID) {
   return rows[0];
 }
 
-export async function createNode(firstName, lastName) {
+export async function createCustomer(firstName, lastName) {
   const [result] = await pool.query(
     `
     INSERT INTO customers(firstName, lastName)
@@ -38,5 +38,5 @@ export async function createNode(firstName, lastName) {
   );
 
   const id = result.insertId;
-  return getNode(id);
+  return getCustomer(id);
 }

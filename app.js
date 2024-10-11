@@ -1,8 +1,9 @@
 import dotenv from "dotenv";
-import { getCustomers, getCustomer, createNode } from "./database.js"; // Import đúng hàm getCustomer
+import { getCustomers, getCustomer, createCustomer } from "./database.js"; // Import đúng hàm getCustomer
 dotenv.config();
 import express from "express";
 const app = express();
+app.use(express.json());
 const port = process.env.PORT || 8888;
 const hostname = process.env.HOST_NAME || "localhost";
 
@@ -34,6 +35,11 @@ app.get("/customers/:id", async (req, res) => {
   }
 });
 
+app.post("/customers", async (req, res) => {
+  const { firstName, lastName } = req.body;
+  const customer = await createCustomer(firstName, lastName);
+  res.status(201).send(customer);
+});
 app.listen(port, hostname, () => {
   console.log(`Server is running on http://${hostname}:${port}`);
 });
