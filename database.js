@@ -10,5 +10,33 @@ const pool = mysql
     database: process.env.MYSQL_DATABASE,
   })
   .promise();
-const result = await pool.query("select * from customers").then();
-console.log(result);
+
+export async function getCustomers() {
+  const [rows] = await pool.query("SELECT * FROM customers");
+  return rows;
+}
+
+export async function getCustomer(ID) {
+  const [rows] = await pool.query(
+    `
+    SELECT * 
+    FROM customers
+    WHERE ID = ?
+    `,
+    [ID]
+  );
+  return rows[0];
+}
+
+export async function createNode(firstName, lastName) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO customers(firstName, lastName)
+    VALUES (?, ?)
+    `,
+    [firstName, lastName]
+  );
+
+  const id = result.insertId;
+  return getNode(id);
+}
